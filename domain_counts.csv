@@ -1,0 +1,7 @@
+region,Pathogenic,Benign,Pathogenic_%,Benign_%
+Transactivation (1-44),0,13,0.0,8.6
+N-terminal linker (45-101),0,34,0.0,22.4
+DNA-binding domain (102-292),221,42,93.6,27.6
+Linker (293-324),1,21,0.4,13.8
+Oligomerization (325-356),14,24,5.9,15.8
+C-terminal regulatory (357-393),0,18,0.0,11.8
