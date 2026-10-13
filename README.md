@@ -1,66 +1,52 @@
-# TP53 Missense Variant Landscape
+# 🧬 TP53 Missense Variant Landscape
 
-**A Bioinformatics Analysis of Clinical Variant Classification Across TP53 Protein Domains**
+### A Python-Based Bioinformatics Analysis of Clinical Variant Distribution Across the p53 Protein
 
-## Overview
+[![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Bioinformatics](https://img.shields.io/badge/Field-Bioinformatics-2E8B57)](https://www.ncbi.nlm.nih.gov/clinvar/)
+[![Data Source](https://img.shields.io/badge/Data-NCBI%20ClinVar-orange)](https://www.ncbi.nlm.nih.gov/clinvar/)
 
-The *TP53* gene encodes the tumor protein p53, a transcription factor that plays a central role in cellular stress responses, cell-cycle regulation, DNA damage responses, and tumor suppression. Alterations in TP53 are frequently associated with human cancers, making the characterization of TP53 variants important in cancer biology and molecular genetics.
+## 📌 Project Overview
 
-This project explores the distribution of TP53 missense variants across functional protein regions and investigates the relationship between protein-domain location and clinical classification.
+The **TP53 Missense Variant Landscape** project explores the distribution of missense variants across major functional regions of the human p53 protein and investigates the association between protein location and clinical classifications reported in ClinVar.
 
-Using ClinVar-derived variant records, the analysis applies data cleaning, protein-position mapping, classification filtering, visualization, and statistical testing to investigate differences between pathogenic and benign variants.
+The *TP53* gene encodes p53, a tumor suppressor protein involved in cell-cycle regulation, DNA-damage responses, cellular senescence, and apoptosis. Alterations affecting p53 function are frequently associated with human cancer, making TP53 an important subject in cancer biology, molecular genetics, and clinical genomics.
 
-## Research Questions
+Using Python, this project processes ClinVar-derived variant records, extracts protein-level substitutions, maps variants to predefined protein regions, and applies statistical analysis to compare Pathogenic and Benign classifications.
 
-This project addresses four main questions:
+The primary objective is to demonstrate a reproducible bioinformatics workflow connecting biological data processing, protein-region annotation, data visualization, and statistical interpretation.
 
-1. How are TP53 missense variants distributed across the protein?
-2. Which protein regions contain the largest numbers of pathogenic and benign variants?
-3. Is the DNA-binding domain associated with a higher proportion of pathogenic classifications than the remainder of the protein?
-4. How can variant-level data analysis help characterize the relationship between protein structure and clinical interpretation?
+## 🎯 Research Questions
 
-## Objectives
+- How are TP53 missense protein changes distributed across major regions of the p53 protein?
+- What proportion of Pathogenic and Benign protein changes is observed within the DNA-binding domain?
+- Is location within the DNA-binding domain associated with Pathogenic rather than Benign classification in the analyzed dataset?
 
-- Clean and standardize TP53 missense variant records.
-- Extract amino-acid substitutions and protein positions from variant annotations.
-- Map variants to predefined TP53 protein regions.
-- Compare pathogenic and benign classifications across protein domains.
-- Visualize variant distributions along the protein sequence.
-- Evaluate the association between DNA-binding domain location and pathogenic classification using Fisher's exact test.
+## 🗂️ Data Source
 
-## Data Source
+Variant records were obtained from **NCBI ClinVar**, a public archive of reports on the relationships between genetic variants and human health.
 
-The analysis uses TP53 variant records derived from **ClinVar**, a public database of reported relationships between genetic variants and clinical significance.
+**Source:** [NCBI ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/)
 
-The input file used in this project is:
+The workflow uses protein-level amino-acid substitutions and their corresponding positions to examine the distribution of variants across predefined TP53 protein regions.
 
-`data/raw/clinvar_tp53_missense.txt`
+The analysis focuses on records assigned to the binary clinical classification groups **Pathogenic** and **Benign**. Other categories, including Variants of Uncertain Significance (VUS), conflicting interpretations, and other classifications, are not included in the binary comparison.
 
-The original records are processed to extract protein-level information and clinical classifications.
+## ⚙️ Methods and Workflow
 
-**Data availability:** The input file must be supplied locally at the path above. It is not currently included in the repository. For reproducibility, users should document the original download URL, retrieval date, and any database release information when obtaining the source data.
+The project follows a multi-step computational workflow:
 
-ClinVar classifications reflect submitted clinical interpretations and may change as evidence and expert review evolve.
+1. **Data preprocessing:** Read the downloaded ClinVar-derived dataset and extract relevant variant information.
+2. **Protein-change parsing:** Identify amino-acid substitutions and protein positions from the annotated variant descriptions.
+3. **Classification filtering:** Retain records classified as Pathogenic or Benign for the primary comparison.
+4. **Variant-level quality control:** Identify repeated protein changes and assess whether the same amino-acid change has both Pathogenic and Benign records.
+5. **Conflict handling:** Exclude protein changes with conflicting binary classifications from the final comparison.
+6. **Protein-region annotation:** Assign each protein change to a predefined TP53 region according to its amino-acid position.
+7. **Descriptive analysis:** Calculate Pathogenic and Benign counts and their percentages within the two classification groups for each region.
+8. **Statistical testing:** Use Fisher's exact test to assess the association between DNA-binding-domain location and clinical classification.
+9. **Visualization and output:** Export a summary table and generate figures illustrating the regional and positional distribution of protein changes.
 
-## Methods
-
-### 1. Data Cleaning and Quality Control
-
-The preprocessing workflow:
-
-- Reads the raw TP53 variant records.
-- Filters records associated with the selected protein transcript.
-- Extracts protein changes and amino-acid positions.
-- Identifies records without a successfully parsed protein change.
-- Checks for invalid protein positions.
-- Identifies candidate missense records.
-- Groups clinical classifications into pathogenic, benign, uncertain, conflicting, and other categories.
-
-The initial preprocessing run identified **1,490 candidate missense records** for downstream processing.
-
-### 2. Protein-Domain Mapping
-
-Protein positions are assigned to predefined regions of TP53:
+### Protein regions analyzed
 
 | Protein region | Amino-acid positions |
 |---|---:|
@@ -71,187 +57,145 @@ Protein positions are assigned to predefined regions of TP53:
 | Oligomerization | 325–356 |
 | C-terminal regulatory region | 357–393 |
 
-These boundaries provide a simplified framework for comparing variant distributions across regions. They are not intended to represent every structural or functional subregion of TP53.
+These intervals are predefined analytical regions used in this project.
 
-### 3. Classification Filtering and Deduplication
+## 📊 Key Results
 
-The domain-level comparison focuses on records classified as either **Pathogenic** or **Benign**. Records with uncertain, conflicting, or other classifications are not included in this binary comparison.
+The final analysis included **388 unique protein changes**, comprising 236 classified as Pathogenic and 152 classified as Benign.
 
-Repeated protein-change records are also identified to reduce duplicate representation in the domain-level analysis.
+### Classification summary
 
-After filtering and deduplication, the analysis included **417 records**:
-
-- Pathogenic: 256
-- Benign: 161
-
-These numbers describe the records included in the reported comparison and should not be interpreted as a complete census of all TP53 variants.
-
-### 4. Statistical Analysis
-
-Fisher's exact test is used to evaluate the association between DNA-binding domain location and pathogenic versus benign classification.
-
-The comparison uses a two-by-two contingency table:
-
-| Location | Pathogenic | Benign |
-|---|---:|---:|
-| DNA-binding domain | 241 | 42 |
-| Outside DNA-binding domain | 15 | 119 |
-
-The analysis reports the odds ratio and p-value to quantify the strength of the observed association.
-
-## Results
-
-### Variant Distribution Across Protein Regions
-
-The domain-level comparison shows that pathogenic and benign classifications are distributed differently across the predefined TP53 protein regions.
-
-The DNA-binding domain contains the largest number of pathogenic records in the analyzed dataset.
-
-![Distribution of TP53 variants by protein region](figures/variants_by_region.png)
-
-*Figure 1. Distribution of pathogenic and benign TP53 missense variant records across predefined protein regions.*
-
-### Variant Distribution Along the Protein Sequence
-
-Mapping variant positions along the amino-acid sequence provides a complementary view of where the analyzed variants occur.
-
-![TP53 variants along the protein sequence](figures/variants_along_protein.png)
-
-*Figure 2. Distribution of TP53 missense variants along the protein sequence.*
-
-### DNA-Binding Domain Association
-
-The statistical analysis produced the following results:
-
-| Measure | Result |
+| Metric | Result |
 |---|---:|
-| Pathogenic records in the DNA-binding domain | 241 |
-| Benign records in the DNA-binding domain | 42 |
-| Pathogenic records outside the domain | 15 |
-| Benign records outside the domain | 119 |
-| Odds ratio | 45.52 |
-| Fisher's exact test p-value | 3.10 × 10⁻⁵⁰ |
+| Pathogenic protein changes | 236 |
+| Benign protein changes | 152 |
+| Total unique protein changes analyzed | 388 |
+| Pathogenic changes within the DNA-binding domain | 221 |
+| Benign changes within the DNA-binding domain | 42 |
+| Pathogenic changes outside the DNA-binding domain | 15 |
+| Benign changes outside the DNA-binding domain | 110 |
+| Odds ratio | 38.59 |
+| Fisher's exact test p-value | 3.3041 × 10⁻⁴⁴ |
 
-The observed odds ratio indicates a strong association between location within the DNA-binding domain and pathogenic classification in this dataset.
+### Regional distribution
 
-The very small p-value provides strong statistical evidence against independence between domain location and classification under the assumptions of the test.
+The DNA-binding domain contained 221 of the 236 Pathogenic protein changes (93.6%) and 42 of the 152 Benign protein changes (27.6%).
 
-These findings describe an association within the analyzed records; they do not establish causation or determine the clinical significance of an individual variant.
+The percentages above use the total number of protein changes in each classification group as the denominator. They therefore describe the distribution of Pathogenic or Benign changes across regions, rather than the probability that an individual change in a region is Pathogenic.
 
-## Biological Interpretation
+### Statistical interpretation
 
-The DNA-binding domain is essential to p53's role as a transcription factor. Changes affecting this region may interfere with DNA recognition and the regulation of downstream target genes.
+Fisher's exact test compared protein changes located within the DNA-binding domain with those located elsewhere in the protein.
 
-The enrichment of pathogenic classifications in this region is consistent with the biological importance of DNA binding for p53 function.
+The analysis produced an **odds ratio of 38.59** and a **p-value of 3.3041 × 10⁻⁴⁴**, indicating a strong association between DNA-binding-domain location and Pathogenic classification in this dataset.
 
-However, domain location alone cannot explain every variant's effect. Functional consequences depend on the specific amino-acid substitution, molecular context, experimental evidence, and available clinical data.
+This result is consistent with the biological importance of the p53 DNA-binding domain. However, it does not establish that location alone determines pathogenicity, nor does it predict the clinical effect of an individual variant. The findings depend on the selected dataset, clinical classifications, filtering strategy, and predefined region boundaries.
 
-## Repository Structure
+## 📈 Visualizations
+
+### 1. Variant distribution by protein region
+
+![TP53 variants by region](figures/variants_by_region.png)
+
+This figure compares the distribution of Pathogenic and Benign protein changes across the six predefined protein regions.
+
+### 2. Variant distribution along the protein sequence
+
+![TP53 variants along protein](figures/variants_along_protein.png)
+
+This figure visualizes the distribution of analyzed protein changes along the TP53 amino-acid sequence.
+
+## 🧰 Technologies and Tools
+
+- **Python** — scripting and computational analysis
+- **Pandas** — data cleaning, filtering, grouping, and tabulation
+- **Matplotlib** — data visualization
+- **SciPy** — Fisher's exact test
+- **NCBI ClinVar** — clinical variant annotation source
+- **Git and GitHub** — version control and project documentation
+
+## 📁 Repository Structure
 
 ```text
 Tp53-variant-landscape/
-├── figures/
-│   ├── variants_by_region.png
-│   └── variants_along_protein.png
+├── data/
+│   ├── raw/
+│   │   └── clinvar_tp53_missense.txt
+│   └── processed/
+│       └── tp53_missense_clean.csv
 ├── scripts/
 │   ├── clean_data.py
 │   └── map_domains.py
+├── figures/
+│   ├── variants_by_region.png
+│   └── variants_along_protein.png
 ├── domain_counts.csv
 ├── requirements.txt
 └── README.md
 ```
 
-The raw and processed data files are generated or supplied locally and are not currently listed among the repository's tracked files.
+The raw and processed data files are shown to document the intended workflow; their availability in a fresh clone depends on which files have been committed to the repository.
 
-## Requirements
+## 🚀 Reproducibility
 
-- Python 3
-- The Python packages listed in `requirements.txt`
+### Requirements
 
-## How to Run
+- Python 3.x
+- Packages listed in `requirements.txt`
 
-### 1. Clone the repository
+### Run the analysis
+
+Clone the repository and navigate to the project directory:
 
 ```bash
 git clone https://github.com/Parmida-Mehranfarid/Tp53-variant-landscape.git
 cd Tp53-variant-landscape
 ```
 
-### 2. Install dependencies
+Install the dependencies:
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-### 3. Add the input data
-
-Place the source file at:
-
-```text
-data/raw/clinvar_tp53_missense.txt
-```
-
-Ensure that the file format matches the format expected by the preprocessing script.
-
-### 4. Run preprocessing
+Run the preprocessing and analysis scripts in sequence:
 
 ```bash
 python scripts/clean_data.py
-```
-
-This step generates the processed dataset required by the downstream analysis.
-
-### 5. Run domain mapping and statistical analysis
-
-```bash
 python scripts/map_domains.py
 ```
 
-This step performs protein-region mapping, classification comparison, statistical testing, and figure generation.
+The analysis script generates `domain_counts.csv` and the figures in the `figures/` directory.
 
-**Note:** The input file and the processed dataset must be available locally before running the full workflow. The generated outputs depend on the supplied data and the versions of the scripts.
+**Data requirement:** The raw ClinVar-derived input file must be available at the path expected by the preprocessing script. If it is not included in the repository, obtain the appropriate source data and place it at that location before running the workflow.
 
-## Limitations
+## ⚠️ Limitations
 
-- The analysis depends on the ClinVar records and classifications available in the selected input dataset.
-- Clinical classifications may change as new evidence becomes available.
-- Variants with uncertain or conflicting interpretations are excluded from the pathogenic-versus-benign comparison.
-- Repeated protein-change records and transcript-selection rules can affect the analyzed variant set.
-- The domain boundaries are predefined and simplify the biological complexity of the protein.
-- Fisher's exact test evaluates association, not causation.
-- The analysis does not account for all potential sources of bias, including differences in variant reporting, evidence availability, and submission practices.
-- No conclusions about the clinical significance of an individual variant should be drawn from this analysis alone.
+- ClinVar classifications are evidence-based annotations that may change as additional evidence becomes available.
+- The analysis includes only records assigned to the Pathogenic and Benign categories; other clinical classifications are outside the scope of the primary comparison.
+- Repeated records and conflicting binary classifications require careful handling because a protein change may be represented by multiple ClinVar records.
+- Protein-region boundaries are predefined for this analysis and may not capture every functional distinction within p53.
+- The statistical analysis examines an association in the selected dataset and does not establish causality or provide clinical predictions for individual variants.
+- The results may be affected by transcript selection, protein-change parsing, dataset composition, and classification practices.
 
-## Future Directions
+## 💡 Skills Demonstrated
 
-Potential extensions of this project include:
+- Biological data processing and quality control
+- Python scripting and Pandas-based analysis
+- Protein-level variant parsing
+- Protein-region annotation
+- Data aggregation and percentage calculations
+- Statistical hypothesis testing using Fisher's exact test
+- Scientific visualization
+- Reproducible research workflows
+- Bioinformatics documentation and version control
 
-- Adding reproducible ClinVar data retrieval and version tracking.
-- Comparing results across transcript definitions.
-- Incorporating additional evidence such as ClinVar review status and functional assay data.
-- Examining individual amino-acid substitutions and recurrent variants.
-- Integrating structural information to explore potential effects on p53 function.
-- Adding automated data-quality checks and a reproducible analysis report.
-- Expanding the analysis to other cancer-associated genes for comparative investigation.
+## 👩‍🔬 Author
 
-## Skills Demonstrated
+**Parmida Mehranfarid**  
+B.Sc. Student in Cellular and Molecular Biology  
+Research interests: Cancer Biology, Human Genetics, Molecular Genetics, and Bioinformatics
 
-- Python-based data processing
-- Variant annotation and protein-position parsing
-- Data cleaning and quality control
-- Protein-domain mapping
-- Clinical variant classification analysis
-- Data visualization
-- Statistical hypothesis testing
-- Biological interpretation of genomic data
-- Reproducible research practices
+## 📚 Disclaimer
 
-## Author
-
-**Parmida Mehranfarid**
-
-This project was developed as an independent bioinformatics analysis exploring the relationship between TP53 protein regions and clinical variant classifications, with an emphasis on cancer biology, molecular genetics, and computational analysis.
-
-## Disclaimer
-
-This repository is intended for educational and research purposes. It is not a clinical decision-support tool and should not be used to diagnose disease or guide patient management.
+This project was developed for educational and research-training purposes. The results are exploratory and are not intended for clinical diagnosis, genetic counseling, or medical decision-making.
